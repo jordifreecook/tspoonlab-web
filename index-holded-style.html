@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Software de Gestión para Cocinas de Hostelería | tspoonlab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ════════════════════════════════════════
+       DESIGN TOKENS — inspired by Holded
+    ════════════════════════════════════════ */
+    :root {
+      /* Backgrounds */
+      --bg-dark:        #07070f;
+      --bg-dark-2:      #0f0f1e;
+      --bg-light:       #f7f5f0;
+      --bg-white:       #ffffff;
+
+      /* Brand accents */
+      --lime:           #ff2d55;
+      --lime-hover:     #e0163d;
+      --indigo:         #6366f1;
+      --orange:         #ff6b35;
+
+      /* Text on dark */
+      --text-dark-hi:   #ffffff;
+      --text-dark-mid:  rgba(255,255,255,0.60);
+      --text-dark-lo:   rgba(255,255,255,0.35);
+
+      /* Text on light */
+      --text-hi:        #0a0a14;
+      --text-mid:       rgba(10,10,20,0.55);
+      --text-lo:        rgba(10,10,20,0.35);
+
+      /* Borders */
+      --border-dark:    rgba(255,255,255,0.08);
+      --border-light:   rgba(10,10,20,0.08);
+
+      /* Type scale */
+      --fs-hero:        clamp(44px, 6.5vw, 84px);
+      --fs-h2:          clamp(32px, 4.5vw, 58px);
+      --fs-h3:          clamp(18px, 2.2vw, 26px);
+      --fs-body:        17px;
+      --fs-small:       14px;
+      --fs-label:       11px;
+
+      /* Spacing */
+      --sec-pad:        clamp(72px, 9vw, 128px);
+      --ctr-max:        1240px;
+      --ctr-px:         clamp(20px, 5vw, 48px);
+
+      /* Radius */
+      --r-card:         20px;
+      --r-img:          16px;
+      --r-btn:          999px;
+    }
+
+    /* ════════════════════════════════════════
+       RESET & BASE
+    ════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: var(--fs-body);
+      color: var(--text-hi);
+      background: var(--bg-white);
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; }
+
+    /* ════════════════════════════════════════
+       LAYOUT HELPERS
+    ════════════════════════════════════════ */
+    .ctr {
+      max-width: var(--ctr-max);
+      margin: 0 auto;
+      padding: 0 var(--ctr-px);
+    }
+
+    /* ════════════════════════════════════════
+       BUTTONS
+    ════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 24px;
+      border-radius: var(--r-btn);
+      font-size: var(--fs-small);
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      white-space: nowrap;
+      transition: background .18s, transform .18s, box-shadow .18s, color .18s;
+    }
+    .btn-lime {
+      background: var(--lime);
+      color: #ffffff;
+    }
+    .btn-lime:hover {
+      background: var(--lime-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(255,45,85,.45);
+    }
+    .btn-lime-lg { padding: 15px 34px; font-size: 16px; }
+    .btn-ghost {
+      background: transparent;
+      color: rgba(255,255,255,.8);
+      border: 1.5px solid rgba(255,255,255,.2);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.08); color: #fff; }
+    .btn-ghost-lg { padding: 14px 32px; font-size: 16px; }
+    .btn-indigo { background: var(--indigo); color: #fff; }
+    .btn-indigo:hover {
+      background: #4f46e5;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(99,102,241,.4);
+    }
+    .btn-orange { background: var(--orange); color: #fff; }
+    .btn-orange:hover {
+      background: #e55c28;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(255,107,53,.4);
+    }
+
+    /* ════════════════════════════════════════
+       PILL LABEL
+    ════════════════════════════════════════ */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 13px;
+      border-radius: var(--r-btn);
+      font-size: var(--fs-label);
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .pill-lime   { background: rgba(255,45,85,.1); border: 1px solid rgba(255,45,85,.25); color: var(--lime); }
+    .pill-indigo { background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.25); color: var(--indigo); }
+    .pill-orange { background: rgba(255,107,53,.1); border: 1px solid rgba(255,107,53,.25); color: var(--orange); }
+
+    /* ════════════════════════════════════════
+       NAVBAR
+    ════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-bottom: 1px solid transparent;
+      transition: background .3s ease, border-color .3s ease, backdrop-filter .3s ease;
+    }
+    .nav.scrolled {
+      background: rgba(7,7,15,.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-dark);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      max-width: var(--ctr-max);
+      margin: 0 auto;
+      padding: 0 var(--ctr-px);
+      gap: 24px;
+    }
+    .nav-logo img { height: 30px; width: auto; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-dark-mid);
+      font-size: var(--fs-small);
+      font-weight: 500;
+      padding: 7px 13px;
+      border-radius: 8px;
+      transition: color .15s, background .15s;
+    }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,.07); }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+
+    /* ════════════════════════════════════════
+       HERO
+    ════════════════════════════════════════ */
+    .hero {
+      background: var(--bg-dark);
+      background-image:
+        radial-gradient(ellipse 90% 70% at 50% -5%, rgba(180,0,50,.22) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 85% 55%, rgba(255,45,85,.07) 0%, transparent 55%);
+      padding: calc(var(--sec-pad) * 1.1 + 72px) var(--ctr-px) var(--sec-pad);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Team photo layer — only behind the text/claim, not the video */
+    .hero-text-wrap {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding-bottom: 48px;
+    }
+    .hero-team-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-team-layer img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      opacity: .22;
+      filter: grayscale(100%) brightness(.65);
+      display: block;
+    }
+    .hero-team-layer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, var(--bg-dark) 0%, transparent 20%, transparent 75%, var(--bg-dark) 100%),
+        linear-gradient(to right, var(--bg-dark) 0%, transparent 10%, transparent 90%, var(--bg-dark) 100%);
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-text-wrap > *:not(.hero-team-layer) { position: relative; z-index: 1; }
+    .hero-inner {
+      max-width: var(--ctr-max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,45,85,.08);
+      border: 1px solid rgba(255,45,85,.22);
+      color: var(--lime);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: var(--r-btn);
+      margin-bottom: 36px;
+    }
+    .hero-badge span {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--lime);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:.6; transform:scale(.8); }
+    }
+    .hero h1 {
+      font-size: var(--fs-hero);
+      font-weight: 900;
+      line-height: 1.03;
+      letter-spacing: -.03em;
+      color: var(--text-dark-hi);
+      max-width: 920px;
+      margin: 0 auto 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--lime);
+      text-shadow: 0 0 40px rgba(255,45,85,.35);
+    }
+    .hero-sub {
+      font-size: clamp(17px, 1.8vw, 21px);
+      color: var(--text-dark-mid);
+      max-width: 500px;
+      margin: 0 auto 52px;
+      line-height: 1.55;
+      font-weight: 400;
+    }
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 80px;
+    }
+    .hero-img-wrap {
+      width: 100%;
+      max-width: 980px;
+      border-radius: var(--r-card);
+      overflow: hidden;
+      box-shadow:
+        0 48px 120px rgba(0,0,0,.65),
+        0 0 0 1px rgba(255,255,255,.07),
+        0 0 120px 20px rgba(219,0,50,.18),
+        0 0 240px 60px rgba(180,0,40,.10);
+      position: relative;
+    }
+    .hero-img-wrap img {
+      width: 100%;
+      height: auto;
+    }
+    /* Fade into next section */
+    .hero-img-wrap::after {
+      content:'';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(to bottom, transparent, var(--bg-dark));
+    }
+
+    /* ════════════════════════════════════════
+       LOGO TICKER
+    ════════════════════════════════════════ */
+    .ticker-wrap {
+      background: var(--bg-white);
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      padding: 32px var(--ctr-px);
+      overflow: hidden;
+    }
+    .ticker-label {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-lo);
+      margin-bottom: 32px;
+    }
+    .ticker-outer {
+      overflow: hidden;
+      position: relative;
+    }
+    .ticker-outer::before,
+    .ticker-outer::after {
+      content:'';
+      position: absolute; top:0; bottom:0; width:100px; z-index:2;
+    }
+    .ticker-outer::before { left:0;  background: linear-gradient(to right, var(--bg-white), transparent); }
+    .ticker-outer::after  { right:0; background: linear-gradient(to left,  var(--bg-white), transparent); }
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      width: max-content;
+      animation: ticker-scroll 36s linear infinite;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-logo {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ticker-logo img {
+      height: 180px;
+      width: auto;
+      max-width: 260px;
+      object-fit: contain;
+      filter: grayscale(1);
+      opacity: .55;
+      transition: filter .2s, opacity .2s;
+    }
+    .ticker-logo:hover img { filter: grayscale(0); opacity: 1; }
+
+    /* ════════════════════════════════════════
+       ECOSYSTEM INTRO
+    ════════════════════════════════════════ */
+    .eco-intro {
+      background: var(--bg-light);
+      padding: var(--sec-pad) var(--ctr-px);
+      text-align: center;
+    }
+    .eco-intro .overline {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-lo); margin-bottom: 20px;
+    }
+    .eco-intro h2 {
+      font-size: var(--fs-h2);
+      font-weight: 900; line-height: 1.08;
+      letter-spacing: -.025em;
+      color: var(--text-hi);
+      margin-bottom: 20px;
+    }
+    .eco-intro p {
+      font-size: 19px;
+      color: var(--text-mid);
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .eco-products {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 44px;
+      flex-wrap: wrap;
+    }
+    .eco-product {
+      opacity: .5;
+      transition: opacity .2s;
+    }
+    .eco-product:hover { opacity: 1; }
+    .eco-product img {
+      height: 38px;
+      width: auto;
+      display: block;
+    }
+
+    /* ════════════════════════════════════════
+       FEATURE SECTIONS (alternating)
+    ════════════════════════════════════════ */
+    .feat { padding: var(--sec-pad) var(--ctr-px); }
+    .feat.bg-dark  { background: var(--bg-dark); }
+    .feat.bg-light { background: var(--bg-light); }
+    .feat.bg-white { background: var(--bg-white); }
+
+    .feat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 96px);
+      align-items: center;
+      max-width: var(--ctr-max);
+      margin: 0 auto;
+    }
+    .feat-grid.rev .feat-text { order: 2; }
+    .feat-grid.rev .feat-img  { order: 1; }
+
+    /* Text column */
+    .feat-text { }
+    .feat-text .pill { margin-bottom: 24px; }
+    .feat-text h2 {
+      font-size: clamp(28px, 3.5vw, 46px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -.025em;
+      margin-bottom: 16px;
+    }
+    .feat-text.on-dark h2 { color: var(--text-dark-hi); }
+    .feat-text h2.light-text { color: var(--text-dark-hi); }
+
+    .feat-text .feat-sub {
+      font-size: 17px; line-height: 1.65;
+      margin-bottom: 36px;
+    }
+    .feat-text.on-dark .feat-sub { color: var(--text-dark-mid); }
+    .feat-text .feat-sub.light-sub { color: var(--text-dark-mid); }
+
+    .feat-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      margin-bottom: 44px;
+    }
+    .feat-bullets li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text-mid);
+    }
+    .feat-text.on-dark .feat-bullets li { color: var(--text-dark-mid); }
+
+    .check-icon {
+      width: 20px; height: 20px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .check-icon svg {
+      width: 11px; height: 11px;
+      stroke-width: 2.8; fill: none;
+    }
+    .check-lime   { background: rgba(255,45,85,.12); }
+    .check-lime   svg { stroke: var(--lime); }
+    .check-indigo { background: rgba(99,102,241,.14); }
+    .check-indigo svg { stroke: var(--indigo); }
+    .check-orange { background: rgba(255,107,53,.14); }
+    .check-orange svg { stroke: var(--orange); }
+
+    /* Image column */
+    .feat-img {
+      border-radius: var(--r-card);
+      overflow: hidden;
+      aspect-ratio: 5/4;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+    .feat-img img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .feat-img.shadow-light {
+      box-shadow: 0 24px 64px rgba(0,0,0,.10), 0 0 0 1px var(--border-light);
+    }
+    .feat-img.shadow-dark {
+      box-shadow: 0 24px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06);
+    }
+    /* Free-form image — no crop, no border box */
+    .feat-img.feat-img-free {
+      overflow: visible;
+      background: none;
+      border-radius: 0;
+      box-shadow: none;
+      aspect-ratio: unset;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .feat-img.feat-img-free img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: var(--r-card);
+      box-shadow: 0 32px 80px rgba(0,0,0,.13);
+      filter: drop-shadow(0 8px 32px rgba(219,0,50,.10));
+    }
+
+    /* ── App frame (Holded-style) ── */
+    .app-frame {
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(160deg, #1a1a2e 0%, #12121f 50%, #0d0d18 100%);
+      box-shadow:
+        0 48px 120px rgba(0,0,0,.70),
+        0 0 0 1px rgba(255,255,255,.08),
+        0 0 120px 20px rgba(219,0,50,.18),
+        0 0 240px 60px rgba(180,0,40,.10);
+    }
+    .app-frame-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,.04);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      display: block;
+    }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .app-frame-body {
+      padding: 20px;
+      background: transparent;
+      position: relative;
+      height: 420px;
+    }
+    .card-layer {
+      position: absolute;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 16px 48px rgba(0,0,0,.35), 0 0 0 1px rgba(0,0,0,.06);
+    }
+    .card-back {
+      width: 72%;
+      bottom: 0;
+      left: 20px;
+      z-index: 1;
+    }
+    .card-front {
+      width: 68%;
+      top: 20px;
+      right: 20px;
+      z-index: 2;
+    }
+
+    /* ── Widget float animation ── */
+    @keyframes widget-float {
+      0%   { transform: translateY(0px) rotate3d(1,0,0,0deg); }
+      50%  { transform: translateY(-12px) rotate3d(1,0,0,1.5deg); }
+      100% { transform: translateY(0px) rotate3d(1,0,0,0deg); }
+    }
+    @keyframes feat-enter-right {
+      from { opacity: 0; transform: translateX(48px) scale(.97); }
+      to   { opacity: 1; transform: translateX(0)    scale(1); }
+    }
+    @keyframes feat-enter-left {
+      from { opacity: 0; transform: translateX(-48px) scale(.97); }
+      to   { opacity: 1; transform: translateX(0)     scale(1); }
+    }
+
+    .feat-img.animate-float,
+    .app-frame.animate-float {
+      animation: widget-float 5s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+
+    /* Scroll entrance — applied by JS */
+    .feat-enter-right { opacity: 0; }
+    .feat-enter-right.visible {
+      animation: feat-enter-right .75s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    .feat-enter-left { opacity: 0; }
+    .feat-enter-left.visible {
+      animation: feat-enter-left .75s cubic-bezier(.22,1,.36,1) forwards;
+    }
+
+    /* 3D hover tilt */
+    .feat-img.tilt-hover {
+      transition: transform .15s ease, box-shadow .15s ease;
+      will-change: transform;
+    }
+
+    /* ════════════════════════════════════════
+       SECTORS
+    ════════════════════════════════════════ */
+    .sectors {
+      background: var(--bg-dark);
+      padding: var(--sec-pad) var(--ctr-px);
+      text-align: center;
+    }
+    .sectors .overline {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-dark-lo); margin-bottom: 20px;
+    }
+    .sectors h2 {
+      font-size: var(--fs-h2); font-weight: 900;
+      line-height: 1.08; letter-spacing: -.025em;
+      color: var(--text-dark-hi); margin-bottom: 16px;
+    }
+    .sectors .sec-sub {
+      font-size: 18px; color: var(--text-dark-mid);
+      max-width: 560px; margin: 0 auto 64px; line-height: 1.55;
+    }
+    .sectors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: var(--ctr-max);
+      margin: 0 auto;
+    }
+    .sec-card {
+      position: relative;
+      border-radius: var(--r-card);
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      display: block; /* <a> tag, no nested <a> */
+    }
+    .sec-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s ease;
+    }
+    .sec-card:hover img { transform: scale(1.05); }
+    .sec-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top,
+        rgba(7,7,15,.88) 0%,
+        rgba(7,7,15,.25) 55%,
+        transparent 100%);
+    }
+    .sec-card-body {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 28px 28px 32px; text-align: left;
+    }
+    .sec-card-body h3 {
+      font-size: 22px; font-weight: 800;
+      color: #fff; letter-spacing: -.01em; margin-bottom: 10px;
+    }
+    .sec-card-link {
+      font-size: 13px; font-weight: 700;
+      color: #ff6680; display: inline-flex;
+      align-items: center; gap: 5px;
+    }
+    .sec-card-link::after { content: '→'; }
+
+    /* ════════════════════════════════════════
+       STATS
+    ════════════════════════════════════════ */
+    .stats {
+      background: #db0032;
+      padding: 88px var(--ctr-px);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      max-width: var(--ctr-max);
+      margin: 0 auto;
+      text-align: center;
+    }
+    .stat-num {
+      font-size: clamp(40px, 5.5vw, 68px);
+      font-weight: 900; letter-spacing: -.04em;
+      color: #ffffff; line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-lbl {
+      font-size: 15px; font-weight: 600;
+      color: rgba(255,255,255,.60);
+    }
+
+    /* ════════════════════════════════════════
+       TEAM SECTION
+    ════════════════════════════════════════ */
+    .team {
+      background: var(--bg-dark);
+      padding: calc(var(--sec-pad) * 1.1) var(--ctr-px) 0;
+      text-align: center;
+      overflow: hidden;
+    }
+    .team-overline {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,45,85,.7); margin-bottom: 24px;
+    }
+    .team-headline {
+      font-size: clamp(34px, 4.8vw, 64px);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -.03em;
+      color: #ffffff;
+      max-width: 780px; margin: 0 auto 20px;
+    }
+    .team-headline em {
+      font-style: normal;
+      color: var(--lime);
+      text-shadow: 0 0 40px rgba(255,45,85,.35);
+    }
+    .team-sub {
+      font-size: clamp(16px, 1.6vw, 19px);
+      color: rgba(255,255,255,.55);
+      max-width: 520px; margin: 0 auto 64px;
+      line-height: 1.6;
+    }
+    .team-photo-wrap {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .team-photo-wrap img {
+      width: 100%; height: auto; display: block;
+      border-radius: 20px 20px 0 0;
+      filter: grayscale(12%);
+    }
+    /* fade bottom into ticker (white) */
+    .team-photo-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 45%;
+      background: linear-gradient(to bottom, transparent, var(--bg-dark));
+      pointer-events: none;
+    }
+
+    /* ════════════════════════════════════════
+       CLIENT LOGOS GRID
+    ════════════════════════════════════════ */
+    .clients {
+      background: var(--bg-light);
+      padding: var(--sec-pad) var(--ctr-px);
+      text-align: center;
+    }
+    .clients .overline {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-lo); margin-bottom: 20px;
+    }
+    .clients h2 {
+      font-size: var(--fs-h2); font-weight: 900;
+      letter-spacing: -.025em; color: var(--text-hi);
+      margin-bottom: 16px;
+    }
+    .clients .cl-sub {
+      font-size: 18px; color: var(--text-mid);
+      max-width: 520px; margin: 0 auto 56px; line-height: 1.55;
+    }
+    /* Testimonials grid */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 72px;
+    }
+    .test-card {
+      background: #fff;
+      border-radius: var(--r-card);
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,.08), 0 0 0 1px var(--border-light);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .test-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,.13), 0 0 0 1px var(--border-light);
+    }
+    .test-video-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 */
+      background: #000;
+    }
+    .test-video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .test-info {
+      padding: 20px 24px 24px;
+    }
+    .test-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-hi);
+      margin: 0 0 4px;
+    }
+    .test-role {
+      font-size: 14px;
+      color: var(--text-mid);
+      margin: 0;
+    }
+    @media (max-width: 700px) {
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
+    /* Clients carousel */
+    .clients-carousel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow: hidden;
+      position: relative;
+      max-width: 100%;
+    }
+    .clients-carousel::before,
+    .clients-carousel::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; width: 140px; z-index: 2;
+      pointer-events: none;
+    }
+    .clients-carousel::before { left: 0;  background: linear-gradient(to right, var(--bg-light), transparent); }
+    .clients-carousel::after  { right: 0; background: linear-gradient(to left,  var(--bg-light), transparent); }
+
+    .cl-row {
+      display: flex;
+      gap: 14px;
+      width: max-content;
+    }
+    .cl-row-1 { animation: cl-scroll-left  38s linear infinite; }
+    .cl-row-2 { animation: cl-scroll-right 42s linear infinite; }
+    .cl-row:hover { animation-play-state: paused; }
+
+    @keyframes cl-scroll-left  { 0% { transform: translateX(0); }    100% { transform: translateX(-50%); } }
+    @keyframes cl-scroll-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); }    }
+
+    .cl-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      padding: 18px 24px;
+      display: flex; align-items: center; justify-content: center;
+      height: 72px;
+      min-width: 160px;
+      flex-shrink: 0;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .cl-card:hover {
+      box-shadow: 0 8px 28px rgba(0,0,0,.09);
+      transform: translateY(-2px);
+    }
+    .cl-card img {
+      max-height: 28px; max-width: 120px;
+      width: auto; object-fit: contain;
+      filter: grayscale(1); opacity: .55;
+      transition: filter .2s, opacity .2s;
+    }
+    .cl-card:hover img { filter: none; opacity: 1; }
+
+    /* ════════════════════════════════════════
+       FINAL CTA
+    ════════════════════════════════════════ */
+    .final-cta {
+      background: var(--bg-dark);
+      background-image:
+        radial-gradient(ellipse 70% 60% at 50% 110%, rgba(180,0,50,.22) 0%, transparent 65%);
+      padding: var(--sec-pad) var(--ctr-px);
+      text-align: center;
+    }
+    .final-cta h2 {
+      font-size: clamp(34px, 5vw, 64px);
+      font-weight: 900; letter-spacing: -.025em;
+      color: var(--text-dark-hi); margin-bottom: 20px; line-height: 1.07;
+    }
+    .final-cta p {
+      font-size: 18px; color: var(--text-dark-mid);
+      max-width: 460px; margin: 0 auto 52px; line-height: 1.6;
+    }
+    .cta-actions {
+      display: flex; align-items: center;
+      justify-content: center; gap: 12px; flex-wrap: wrap;
+    }
+
+    /* ════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════ */
+    .footer {
+      background: #050510;
+      border-top: 1px solid var(--border-dark);
+      padding: 72px var(--ctr-px) 40px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 48px;
+      max-width: var(--ctr-max);
+      margin: 0 auto 60px;
+    }
+    .footer-brand img { height: 26px; width: auto; margin-bottom: 18px; }
+    .footer-brand p { font-size: 14px; color: rgba(255,255,255,.38); line-height: 1.7; max-width: 280px; }
+    .footer-col h4 { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.85); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .footer-col ul li a { font-size: 14px; color: rgba(255,255,255,.4); transition: color .15s; }
+    .footer-col ul li a:hover { color: rgba(255,255,255,.8); }
+    .footer-bottom {
+      border-top: 1px solid var(--border-dark);
+      padding-top: 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: var(--ctr-max); margin: 0 auto;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-bottom p { font-size: 13px; color: rgba(255,255,255,.28); }
+    .footer-legal { display: flex; gap: 24px; }
+    .footer-legal a { font-size: 13px; color: rgba(255,255,255,.28); transition: color .15s; }
+    .footer-legal a:hover { color: rgba(255,255,255,.65); }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .feat-grid, .feat-grid.rev { grid-template-columns: 1fr; }
+      .feat-grid.rev .feat-text { order: 1; }
+      .feat-grid.rev .feat-img  { order: 2; }
+      .sectors-grid { grid-template-columns: 1fr; }
+      .sec-card { aspect-ratio: 16/9; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .clients-grid { grid-template-columns: repeat(3, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav-actions .btn-ghost { display: none; }
+      .clients-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════╗
+     ║  NAVBAR                              ║
+     ╚══════════════════════════════════════╝ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="https://www.tspoonlab.com/" class="nav-logo">
+      <img src="https://www.tspoonlab.com/wp-content/uploads/2026/04/logo-tspoonLab-inverted.svg"
+           alt="tspoonlab"
+           onerror="this.src='https://www.tspoonlab.com/wp-content/themes/tspoonlab/assets/images/brand/logo-tspoonLab.svg';this.style.filter='brightness(0) invert(1)'">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Soluciones</a></li>
+      <li><a href="#">Tarifas</a></li>
+      <li><a href="https://www.tspoonlab.com/marketplace/">Marketplace</a></li>
+      <li><a href="https://www.tspoonlab.com/nosotros/">Nosotros</a></li>
+      <li><a href="https://forms.tspoonlab.com/contacto-app/">Contacto</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="https://app.tspoonlab.com/recipes/app/_/login" class="btn btn-ghost">Login</a>
+      <a href="https://forms.tspoonlab.com/contacto-appcuentademo/" class="btn btn-lime">Pruébalo</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  HERO                                ║
+     ╚══════════════════════════════════════╝ -->
+<section class="hero">
+  <div class="hero-inner">
+
+    <!-- Texto del claim con foto del equipo como fondo semitransparente -->
+    <div class="hero-text-wrap">
+      <div class="hero-team-layer">
+        <img src="DSC08242.jpg" alt="" aria-hidden="true">
+      </div>
+
+      <div class="hero-badge">
+        <span></span>
+        Software para cocinas profesionales
+      </div>
+
+      <h1>El software para cocinas profesionales
+        <em>en el que te acompañan personas</em></h1>
+
+      <p class="hero-sub">
+        Una sola plataforma.<br>
+        Toda tu operativa bajo control.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="https://www.tspoonlab.com/solicitar-presentacion/"
+           class="btn btn-lime btn-lime-lg">Más info</a>
+        <a href="https://forms.tspoonlab.com/contacto-appcuentademo/"
+           class="btn btn-ghost btn-ghost-lg">Pedir demo gratis</a>
+      </div>
+    </div>
+
+    <div class="hero-img-wrap">
+      <video
+        src="https://www.tspoonlab.com/wp-content/uploads/2026/04/video-home-hero.mp4"
+        autoplay muted loop playsinline
+        style="width:100%;height:auto;display:block;border-radius:inherit;">
+      </video>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  LOGO TICKER                         ║
+     ╚══════════════════════════════════════╝ -->
+<div class="ticker-wrap">
+  <p class="ticker-label">Confían en nosotros</p>
+  <div class="ticker-outer">
+    <div class="ticker-track">
+      <!-- Set 1 -->
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Ricard-Camarena.png"    alt="Ricard Camarena"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Grupo-Dani-Garcia-1.png" alt="Grupo Dani García"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Aponiente.png"           alt="Aponiente"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Jubany.png"              alt="Jubany Events"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Casa-Cacao.png"          alt="Casa Cacao"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Rocambolesc.png"         alt="Rocambolesc"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Tandem-Gastronomico.png" alt="Tándem Gastronómico"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2024/01/quiquedacosta.jpg"       alt="Quique Dacosta"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2024/04/logo-ibersol.jpg"        alt="Ibersol"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2024/04/logo-port-aventura.jpg"  alt="PortAventura"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2024/09/logo-sercotel.jpg"       alt="Sercotel"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2025/04/basqueculinarycenter.jpg" alt="Basque Culinary Center"></div>
+      <!-- Set 2 (duplicate para loop sin salto) -->
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Ricard-Camarena.png"    alt="Ricard Camarena"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Grupo-Dani-Garcia-1.png" alt="Grupo Dani García"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Aponiente.png"           alt="Aponiente"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Jubany.png"              alt="Jubany Events"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Casa-Cacao.png"          alt="Casa Cacao"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Rocambolesc.png"         alt="Rocambolesc"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2023/06/Tandem-Gastronomico.png" alt="Tándem Gastronómico"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2024/01/quiquedacosta.jpg"       alt="Quique Dacosta"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2024/04/logo-ibersol.jpg"        alt="Ibersol"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2024/04/logo-port-aventura.jpg"  alt="PortAventura"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2024/09/logo-sercotel.jpg"       alt="Sercotel"></div>
+      <div class="ticker-logo"><img src="https://www.tspoonlab.com/wp-content/uploads/2025/04/basqueculinarycenter.jpg" alt="Basque Culinary Center"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  ECOSYSTEM INTRO                     ║
+     ╚══════════════════════════════════════╝ -->
+<section class="eco-intro">
+  <div class="ctr">
+    <p class="overline">El ecosistema tspoonlab</p>
+    <h2>WebApp tspoonBack + App tspoonFast<br>+ tu Asesor personal</h2>
+    <p>Sea cual sea tu cocina, tspoonlab te da las herramientas —<br>y las personas — para tenerlo todo bajo control.</p>
+
+    <div class="eco-products">
+      <div class="eco-product">
+        <img src="logo-tspoonBack.svg" alt="tspoonBack">
+      </div>
+      <div class="eco-product">
+        <img src="logo-tspoonFast.svg" alt="tspoonFast">
+      </div>
+      <div class="eco-product">
+        <img src="logo-asesorPersonal.svg" alt="Asesor Personal">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  TSPOONBACK (dark)                   ║
+     ╚══════════════════════════════════════╝ -->
+<section class="feat bg-dark">
+  <div class="feat-grid ctr">
+
+    <div class="feat-text on-dark">
+      <div class="pill pill-lime">tspoonBack</div>
+      <h2 class="light-text">Gestiona y analiza<br>tu negocio</h2>
+      <p class="feat-sub light-sub">
+        Gestiona tu negocio con perspectiva: controla, analiza y mejora
+        todos tus puntos de venta desde un solo lugar.
+      </p>
+      <ul class="feat-bullets">
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Crea y controla tu oferta gastronómica
+        </li>
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Gestiona todas tus compras desde un solo lugar
+        </li>
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Analiza tus ventas y maximiza la rentabilidad
+        </li>
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Control total de almacenes e inventarios
+        </li>
+      </ul>
+      <a href="https://www.tspoonlab.com/tspoonback/" class="btn btn-lime">Saber más</a>
+    </div>
+
+    <div class="app-frame animate-float">
+      <div class="app-frame-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+      </div>
+      <div class="app-frame-body">
+        <img src="card-ventas.png"      class="card-layer card-back"  alt="Ventas" loading="lazy">
+        <img src="card-rentabilidad.png" class="card-layer card-front" alt="Rentabilidad" loading="lazy">
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  TSPOONFAST (light, reversed)        ║
+     ╚══════════════════════════════════════╝ -->
+<section class="feat bg-light">
+  <div class="feat-grid rev ctr">
+
+    <div class="feat-text">
+      <div class="pill pill-lime">tspoonFast</div>
+      <h2>Controla la operativa<br>del día a día</h2>
+      <p class="feat-sub">La app que simplifica el día a día en cocina y sala.</p>
+      <ul class="feat-bullets">
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Realiza y recepciona pedidos e inventarios por voz
+        </li>
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Gestiona albaranes solo con una foto
+        </li>
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Gestiona procesos diarios
+        </li>
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Controla mermas
+        </li>
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Supervisa traspasos entre centros de coste
+        </li>
+        <li>
+          <span class="check-icon check-lime">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Consulta fichas con tus elaboraciones al instante
+        </li>
+      </ul>
+      <a href="https://www.tspoonlab.com/tspoonfast/" class="btn btn-lime">Saber más</a>
+    </div>
+
+    <div class="feat-img shadow-light">
+      <img src="https://www.tspoonlab.com/wp-content/uploads/2026/04/02-img-tspoonfast.jpg"
+           alt="tspoonFast — app para cocina y sala" loading="lazy">
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  ASESOR PERSONAL (white)             ║
+     ╚══════════════════════════════════════╝ -->
+<section class="feat bg-light">
+  <div class="feat-grid ctr">
+
+    <div class="feat-text">
+      <div class="pill pill-lime">Asesor personal</div>
+      <h2>Te acompañamos<br>desde el inicio</h2>
+      <p class="feat-sub">
+        Nuestro grupo de <strong>asesores personales</strong> te recibirá,
+        te ayudará y acompañará en todo el proceso de implantación.
+      </p>
+      <p style="font-size:17px;color:var(--text-mid);line-height:1.6;margin-bottom:44px;font-style:italic;">
+        Porque un software sin personas, no es nada.
+      </p>
+      <a href="https://www.tspoonlab.com/solicitar-presentacion/" class="btn btn-lime">Más info</a>
+    </div>
+
+    <div class="feat-img feat-img-free">
+      <img src="https://www.tspoonlab.com/wp-content/uploads/2026/04/03-img-asesorpersonal-v3.png"
+           alt="Asesor personal tspoonlab" loading="lazy">
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  SECTORS                             ║
+     ╚══════════════════════════════════════╝ -->
+<section class="sectors">
+  <div class="ctr">
+    <p class="overline">Sectores tspoonlab</p>
+    <h2>Sea cual sea tu modelo de negocio,<br>tenemos una solución pensada para ti</h2>
+    <p class="sec-sub">Restaurantes, hoteles y cocinas de producción — tspoonlab se adapta a cada entorno profesional.</p>
+
+    <div class="sectors-grid">
+
+      <a href="https://www.tspoonlab.com/hoteles/" class="sec-card">
+        <img src="https://www.tspoonlab.com/wp-content/uploads/2026/04/img-sectores-hoteles.jpg"
+             alt="Hoteles" loading="lazy">
+        <div class="sec-card-overlay"></div>
+        <div class="sec-card-body">
+          <h3>Hoteles</h3>
+          <span class="sec-card-link">Saber más</span>
+        </div>
+      </a>
+
+      <a href="https://www.tspoonlab.com/restauracion/" class="sec-card">
+        <img src="https://www.tspoonlab.com/wp-content/uploads/2026/04/img-sectores-restauracion.jpg"
+             alt="Restauración" loading="lazy">
+        <div class="sec-card-overlay"></div>
+        <div class="sec-card-body">
+          <h3>Restauración</h3>
+          <span class="sec-card-link">Saber más</span>
+        </div>
+      </a>
+
+      <a href="https://www.tspoonlab.com/cocinas/" class="sec-card">
+        <img src="https://www.tspoonlab.com/wp-content/uploads/2026/04/img-sectores-cocinas.jpg"
+             alt="Cocinas de producción" loading="lazy">
+        <div class="sec-card-overlay"></div>
+        <div class="sec-card-body">
+          <h3>Cocinas de producción</h3>
+          <span class="sec-card-link">Saber más</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  STATS                               ║
+     ╚══════════════════════════════════════╝ -->
+<section class="stats">
+  <div class="stats-grid">
+    <div>
+      <div class="stat-num" data-target="2000" data-prefix="+">+2000</div>
+      <div class="stat-lbl">Clientes</div>
+    </div>
+    <div>
+      <div class="stat-num" data-target="14" data-prefix="+">+14</div>
+      <div class="stat-lbl">Años de experiencia</div>
+    </div>
+    <div>
+      <div class="stat-num" data-target="40" data-prefix="+">+40</div>
+      <div class="stat-lbl">Estrellas Michelin</div>
+    </div>
+    <div>
+      <div class="stat-num" data-target="20" data-prefix="+">+20</div>
+      <div class="stat-lbl">Países</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  CLIENT LOGOS                        ║
+     ╚══════════════════════════════════════╝ -->
+<section class="clients">
+  <div class="ctr">
+    <p class="overline">Clientes que avanzan con nosotros</p>
+    <h2>Esto dicen nuestros clientes</h2>
+    <p class="cl-sub">Desde restaurantes con Estrella Michelin hasta grandes cadenas hoteleras y grupos de restauración.</p>
+
+    <!-- VIDEO TESTIMONIALS -->
+    <div class="testimonials-grid">
+
+      <div class="test-card">
+        <div class="test-video-wrap">
+          <iframe src="https://www.youtube.com/embed/BwXJ2RNNKCU"
+            title="Testimonio Esteban Sedano"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="test-info">
+          <p class="test-name">Esteban Sedano</p>
+          <p class="test-role">Director de Operaciones Hoteleras · PortAventura</p>
+        </div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-video-wrap">
+          <iframe src="https://www.youtube.com/embed/nbXjENsWOBo"
+            title="Testimonio Jorge Martín y Javier Garaboa"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="test-info">
+          <p class="test-name">Jorge Martín &amp; Javier Garaboa</p>
+          <p class="test-role">Director Creativo &amp; Head of Controlling · Grupo Dani García</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  FINAL CTA                           ║
+     ╚══════════════════════════════════════╝ -->
+<section class="final-cta">
+  <div class="ctr">
+    <h2>Empieza a controlar<br>tu cocina hoy mismo</h2>
+    <p>Sin compromisos. Nuestro equipo te acompañará en cada paso del proceso.</p>
+    <div class="cta-actions">
+      <a href="https://forms.tspoonlab.com/contacto-appcuentademo/"
+         class="btn btn-lime btn-lime-lg">Pruébalo gratis</a>
+      <a href="https://www.tspoonlab.com/solicitar-presentacion/"
+         class="btn btn-ghost btn-ghost-lg">Solicitar presentación</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════════════╗
+     ║  FOOTER                              ║
+     ╚══════════════════════════════════════╝ -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img src="https://www.tspoonlab.com/wp-content/uploads/2026/04/logo-tspoonLab-inverted.svg"
+           alt="tspoonlab"
+           onerror="this.src='https://www.tspoonlab.com/wp-content/themes/tspoonlab/assets/images/brand/logo-tspoonLab.svg';this.style.filter='brightness(0) invert(1)'">
+      <p>Software de gestión para cocinas profesionales. Escandallos, inventarios y control de costes para hostelería de alto nivel.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Soluciones</h4>
+      <ul>
+        <li><a href="https://www.tspoonlab.com/tspoonback/">tspoonBack</a></li>
+        <li><a href="https://www.tspoonlab.com/tspoonfast/">tspoonFast</a></li>
+        <li><a href="https://www.tspoonlab.com/marketplace/">Marketplace</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Tarifas</h4>
+      <ul>
+        <li><a href="https://www.tspoonlab.com/restauracion/">Restauración</a></li>
+        <li><a href="https://www.tspoonlab.com/hoteles/">Hoteles</a></li>
+        <li><a href="https://www.tspoonlab.com/cocinas/">Cocinas de producción</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="https://www.tspoonlab.com/nosotros/">Nosotros</a></li>
+        <li><a href="https://forms.tspoonlab.com/contacto-app/">Contacto</a></li>
+        <li><a href="https://app.tspoonlab.com/recipes/app/_/login">Login</a></li>
+        <li><a href="http://forms.tspoonlab.com/contacto-appcuentademo">Pruébalo</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© tSpoonLab 2026, todos los derechos reservados.</p>
+    <nav class="footer-legal">
+      <a href="https://www.tspoonlab.com/politica-de-privacidad/">Privacidad</a>
+      <a href="https://www.tspoonlab.com/aviso-legal/">Aviso Legal</a>
+      <a href="https://www.tspoonlab.com/politica-de-cookies/">Política de cookies</a>
+    </nav>
+  </div>
+</footer>
+
+
+<script>
+  (function() {
+    // ── Navbar scroll ──
+    var nav = document.querySelector('.nav');
+    function onScroll() {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ── Scroll entrance for feat-img ──
+    var enterEls = document.querySelectorAll('.feat-enter-right, .feat-enter-left');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      enterEls.forEach(function(el) { io.observe(el); });
+    } else {
+      enterEls.forEach(function(el) { el.classList.add('visible'); });
+    }
+
+    // ── Stat counter animation ──
+    var statEls = document.querySelectorAll('.stat-num[data-target]');
+    var statsDone = false;
+    function animateCounters() {
+      if (statsDone) return;
+      statsDone = true;
+      statEls.forEach(function(el) {
+        var target = parseInt(el.getAttribute('data-target'), 10);
+        var prefix = el.getAttribute('data-prefix') || '';
+        var duration = 1600;
+        var startTime = null;
+        // easeOutExpo
+        function ease(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          var progress = Math.min((ts - startTime) / duration, 1);
+          var current = Math.round(ease(progress) * target);
+          el.textContent = prefix + current.toLocaleString('es-ES');
+          if (progress < 1) requestAnimationFrame(step);
+          else el.textContent = prefix + target.toLocaleString('es-ES');
+        }
+        requestAnimationFrame(step);
+      });
+    }
+    if ('IntersectionObserver' in window) {
+      var statsSection = document.querySelector('.stats');
+      if (statsSection) {
+        var statsIO = new IntersectionObserver(function(entries) {
+          if (entries[0].isIntersecting) {
+            animateCounters();
+            statsIO.disconnect();
+          }
+        }, { threshold: 0.3 });
+        statsIO.observe(statsSection);
+      }
+    } else {
+      animateCounters();
+    }
+
+    // ── 3D tilt on hover ──
+    document.querySelectorAll('.tilt-hover').forEach(function(el) {
+      el.addEventListener('mousemove', function(e) {
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width  - 0.5;
+        var y = (e.clientY - r.top)  / r.height - 0.5;
+        el.style.transform = 'perspective(900px) rotateY(' + (x * 10) + 'deg) rotateX(' + (-y * 7) + 'deg) scale(1.02)';
+        el.style.boxShadow = '0 32px 100px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.09), 0 0 80px 10px rgba(219,0,50,.22)';
+      });
+      el.addEventListener('mouseleave', function() {
+        el.style.transform = '';
+        el.style.boxShadow = '';
+      });
+    });
+  })();
+</script>
+</body>
+</html>
