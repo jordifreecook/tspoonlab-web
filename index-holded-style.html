@@ -156,11 +156,11 @@
       left: 0;
       right: 0;
       z-index: 200;
-      background: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.95);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(10,10,20,.07);
-      box-shadow: 0 1px 24px rgba(0,0,0,.06);
+      border-bottom: 1px solid transparent;
+      box-shadow: none;
       transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
     }
     .nav.scrolled {
@@ -206,7 +206,7 @@
       background-image:
         radial-gradient(ellipse 90% 70% at 50% -5%, rgba(255,45,85,.07) 0%, transparent 60%),
         radial-gradient(ellipse 50% 40% at 85% 55%, rgba(255,45,85,.04) 0%, transparent 55%);
-      padding: calc(var(--sec-pad) * 1.1 + 72px) var(--ctr-px) var(--sec-pad);
+      padding: 72px var(--ctr-px) var(--sec-pad);
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -231,7 +231,7 @@
       opacity: .38;
       filter: grayscale(20%) brightness(.84) contrast(1.1);
       display: block;
-      transform: translateY(-32%);
+      transform: translateY(-24%);
     }
     .hero-team-layer::after {
       content: '';
