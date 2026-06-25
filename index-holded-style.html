@@ -156,11 +156,11 @@
       left: 0;
       right: 0;
       z-index: 200;
-      background: rgba(255,255,255,.88);
+      background: rgba(15,15,30,.94);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(10,10,20,.07);
-      box-shadow: 0 1px 24px rgba(0,0,0,.06);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      box-shadow: none;
       transition: background .3s ease, border-color .3s ease, box-shadow .3s ease;
     }
     .nav.scrolled {
@@ -170,6 +170,8 @@
       border-bottom: 1px solid var(--border-light);
       box-shadow: 0 2px 32px rgba(0,0,0,.09);
     }
+    .nav-logo img { transition: filter .3s ease; }
+    .nav.scrolled .nav-logo img { filter: brightness(0); }
     .nav-inner {
       display: flex;
       align-items: center;
@@ -188,24 +190,29 @@
       list-style: none;
     }
     .nav-links a {
-      color: var(--text-mid);
+      color: rgba(255,255,255,.65);
       font-size: var(--fs-small);
       font-weight: 500;
       padding: 7px 13px;
       border-radius: 8px;
       transition: color .15s, background .15s;
     }
-    .nav-links a:hover { color: var(--text-hi); background: rgba(0,0,0,.06); }
+    .nav-links a:hover { color: rgba(255,255,255,.95); background: rgba(255,255,255,.08); }
+    .nav.scrolled .nav-links a { color: var(--text-mid); }
+    .nav.scrolled .nav-links a:hover { color: var(--text-hi); background: rgba(0,0,0,.06); }
+    .nav .btn-ghost { color: rgba(255,255,255,.85); border-color: rgba(255,255,255,.25); }
+    .nav .btn-ghost:hover { background: rgba(255,255,255,.1); color: #fff; }
+    .nav.scrolled .btn-ghost { color: var(--text-hi); border-color: rgba(10,10,20,.18); }
+    .nav.scrolled .btn-ghost:hover { background: rgba(0,0,0,.05); color: var(--text-hi); }
     .nav-actions { display: flex; align-items: center; gap: 8px; }
 
     /* ════════════════════════════════════════
        HERO
     ════════════════════════════════════════ */
     .hero {
-      background: var(--bg-white);
-      background-image:
-        radial-gradient(ellipse 90% 70% at 50% -5%, rgba(255,45,85,.07) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 85% 55%, rgba(255,45,85,.04) 0%, transparent 55%);
+      background:
+        radial-gradient(ellipse 75% 45% at 50% 0%, rgba(255,45,85,.22) 0%, transparent 60%),
+        linear-gradient(to bottom, #1a0a12 0%, #0f0f1e 18%, #0f0f1e 28%, #ffffff 56%, #ffffff 100%);
       padding: calc(var(--sec-pad) * 1.1 + 72px) var(--ctr-px) var(--sec-pad);
       text-align: center;
       position: relative;
